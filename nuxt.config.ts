@@ -9,6 +9,14 @@ export default defineNuxtConfig({
     compatibilityVersion: 4,
   },
 
+  // Components configuration
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false, // Don't prefix with directory names
+    },
+  ],
+
   // Modules
   modules: [
     '@nuxtjs/tailwindcss',
