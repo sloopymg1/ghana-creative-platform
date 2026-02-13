@@ -55,7 +55,10 @@
 </template>
 
 <script setup lang="ts">
-const { data, pending, error } = await useFetch('/api/radio/stations', {
+import { computed } from 'vue'
+import { useFetch } from 'nuxt/app'
+
+const { data, pending, error } = useFetch('/api/radio/stations', {
   query: { limit: 50 },
 })
 

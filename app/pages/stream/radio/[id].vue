@@ -43,9 +43,15 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 const route = useRoute()
 const id = route.params.id as string
 
-const { data, error } = await useFetch(`/api/radio/stations/${id}`)
+interface Station {
+  data: any
+}
+
+const { data, error } = await useFetch<Station>(`/api/radio/stations/${id}`)
 const station = computed(() => data.value?.data)
 </script>
