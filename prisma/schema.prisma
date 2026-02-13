@@ -1,0 +1,511 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// AUTHENTICATION & USERS
+// ============================================
+
+enum UserStatus {
+  PENDING_VERIFICATION  // Email not verified
+  ACTIVE                // Active account
+  SUSPENDED             // Temporarily suspended
+  BANNED                // Permanently banned
+  INACTIVE              // User deactivated account
+}
+
+enum UserType {
+  ARTIST                // Artists & Creatives
+  STAKEHOLDER           // Industry Stakeholders
+  GOVERNMENT            // Government Officials & Policy Makers
+  PUBLIC                // General Public & Fans
+  ADMIN                 // System Administrators
+}
+
+model User {
+  id                String      @id @default(cuid())
+  email             String      @unique
+  emailVerified     DateTime?
+  password          String      // Hashed with bcrypt
+  status            UserStatus  @default(PENDING_VERIFICATION)
+  userType          UserType
+
+  // Profile fields
+  firstName         String
+  lastName          String
+  phoneNumber       String?
+  avatar            String?     // URL to avatar image
+  bio               String?     @db.Text
+
+  // Metadata
+  lastLoginAt       DateTime?
+  lastLoginIp       String?
+  loginCount        Int         @default(0)
+
+  // Timestamps
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  deletedAt         DateTime?   // Soft delete
+
+  // Relations
+  sessions          Session[]
+  verificationTokens VerificationToken[]
+  passwordResets    PasswordReset[]
+  roles             UserRole[]
+  artistProfile     ArtistProfile?
+  stakeholderProfile StakeholderProfile?
+  governmentProfile GovernmentProfile?
+  content           Content[]
+  contentReports    ContentReport[]
+  auditLogs         AuditLog[]
+  notifications     Notification[]
+
+  @@index([email])
+  @@index([status])
+  @@index([userType])
+  @@index([createdAt])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  ipAddress    String?
+  userAgent    String?
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+model VerificationToken {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  type         String   // EMAIL_VERIFICATION, PASSWORD_RESET, etc.
+  expiresAt    DateTime
+  usedAt       DateTime?
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+model PasswordReset {
+  id           String   @id @default(cuid())
+  userId       String
+  token        String   @unique
+  expiresAt    DateTime
+  usedAt       DateTime?
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+// ============================================
+// ROLE-BASED ACCESS CONTROL (RBAC)
+// ============================================
+
+model Role {
+  id          String       @id @default(cuid())
+  name        String       @unique  // SUPER_ADMIN, USER_MANAGER, CONTENT_MODERATOR, etc.
+  displayName String                // Human-readable name
+  description String?      @db.Text
+  isSystem    Boolean      @default(false)  // System roles can't be deleted
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  users       UserRole[]
+  permissions RolePermission[]
+
+  @@index([name])
+}
+
+model Permission {
+  id          String       @id @default(cuid())
+  name        String       @unique  // users.create, users.update, content.moderate, etc.
+  resource    String                // users, content, roles, analytics, etc.
+  action      String                // create, read, update, delete, moderate, etc.
+  description String?      @db.Text
+
+  createdAt   DateTime     @default(now())
+
+  roles       RolePermission[]
+
+  @@index([resource, action])
+  @@index([name])
+}
+
+model UserRole {
+  id         String   @id @default(cuid())
+  userId     String
+  roleId     String
+  assignedAt DateTime @default(now())
+  assignedBy String?  // User ID who assigned this role
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+}
+
+model RolePermission {
+  id           String   @id @default(cuid())
+  roleId       String
+  permissionId String
+
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+}
+
+// ============================================
+// USER PROFILES
+// ============================================
+
+enum ArtCategory {
+  MUSIC
+  VISUAL_ARTS
+  DANCE
+  THEATER
+  FILM
+  LITERATURE
+  CRAFTS
+  DIGITAL_ARTS
+  FASHION
+  CULINARY_ARTS
+  OTHER
+}
+
+model ArtistProfile {
+  id              String        @id @default(cuid())
+  userId          String        @unique
+
+  // Artist-specific fields
+  slug            String?       @unique
+  stageName       String?
+  categories      ArtCategory[]
+  yearsActive     Int?
+  website         String?
+  websiteUrl      String?       // Alternative field name used in API
+  portfolio       String?       // URL to external portfolio
+
+  // Social media
+  facebookUrl     String?
+  instagramUrl    String?
+  twitterUrl      String?
+  youtubeUrl      String?
+  tiktokUrl       String?
+
+  // Verification
+  isVerified      Boolean       @default(false)
+  verifiedAt      DateTime?
+
+  // Stats
+  viewCount       Int           @default(0)
+  followerCount   Int           @default(0)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isVerified])
+  @@index([slug])
+}
+
+model StakeholderProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+
+  // Organization info
+  organizationName String?
+  position        String?
+  industry        String?
+  companySize     String?  // SMALL, MEDIUM, LARGE, ENTERPRISE
+  website         String?
+  companyWebsite  String?  // Alternative field name used in API
+
+  // Interests
+  interestedCategories ArtCategory[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model GovernmentProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+
+  // Government-specific info
+  department      String?
+  position        String?
+  ministry        String?
+  region          String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ============================================
+// CONTENT MANAGEMENT
+// ============================================
+
+enum ContentType {
+  AUDIO          // For radio/music streaming
+  VIDEO          // For YouTube/Facebook videos
+  IMAGE          // For visual arts
+  DOCUMENT       // For literature, reports
+  LIVE_STREAM    // For live streaming events
+}
+
+enum ContentStatus {
+  DRAFT          // Not published yet
+  PENDING_REVIEW // Awaiting moderation
+  PUBLISHED      // Live and visible
+  REJECTED       // Rejected by moderation
+  ARCHIVED       // Archived by user
+  REMOVED        // Removed by admin
+}
+
+model Content {
+  id              String         @id @default(cuid())
+  userId          String
+
+  // Basic info
+  title           String
+  description     String?        @db.Text
+  slug            String         @unique
+  type            ContentType
+  status          ContentStatus  @default(DRAFT)
+
+  // Media files
+  thumbnailUrl    String?
+  fileUrl         String?        // Main content file
+  fileSize        Int?           // In bytes
+  duration        Int?           // Duration in seconds (for audio/video)
+
+  // Categorization
+  categories      ArtCategory[]
+  tags            String[]
+
+  // Metadata
+  externalUrl     String?        // For YouTube/Facebook embeds
+  licenseType     String?        // COPYRIGHT, CC_BY, CC_BY_SA, etc.
+
+  // Stats
+  viewCount       Int            @default(0)
+  likeCount       Int            @default(0)
+  shareCount      Int            @default(0)
+
+  // Moderation
+  moderatedAt     DateTime?
+  moderatedBy     String?        // User ID of moderator
+  moderationNotes String?        @db.Text
+
+  // Publishing
+  publishedAt     DateTime?
+  scheduledAt     DateTime?      // For scheduled publishing
+
+  // Timestamps
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  deletedAt       DateTime?      // Soft delete
+
+  // Relations
+  user            User           @relation(fields: [userId], references: [id])
+  reports         ContentReport[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@index([publishedAt])
+  @@index([slug])
+}
+
+enum ReportReason {
+  INAPPROPRIATE_CONTENT
+  COPYRIGHT_VIOLATION
+  SPAM
+  HARASSMENT
+  MISINFORMATION
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+model ContentReport {
+  id            String       @id @default(cuid())
+  contentId     String
+  reportedBy    String
+
+  reason        ReportReason
+  description   String?      @db.Text
+  status        ReportStatus @default(PENDING)
+
+  reviewedAt    DateTime?
+  reviewedBy    String?      // User ID of reviewer
+  reviewNotes   String?      @db.Text
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  content       Content      @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  reporter      User         @relation(fields: [reportedBy], references: [id])
+
+  @@index([contentId])
+  @@index([reportedBy])
+  @@index([status])
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+enum NotificationType {
+  ACCOUNT_VERIFICATION
+  PASSWORD_RESET
+  CONTENT_PUBLISHED
+  CONTENT_MODERATED
+  ROLE_ASSIGNED
+  SYSTEM_ANNOUNCEMENT
+}
+
+model Notification {
+  id          String           @id @default(cuid())
+  userId      String
+  type        NotificationType
+  title       String
+  message     String           @db.Text
+  link        String?          // URL to related resource
+  isRead      Boolean          @default(false)
+  readAt      DateTime?
+
+  createdAt   DateTime         @default(now())
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+
+// ============================================
+// AUDIT LOGS
+// ============================================
+
+enum AuditAction {
+  USER_CREATED
+  USER_UPDATED
+  USER_DELETED
+  USER_LOGIN
+  USER_LOGOUT
+  ROLE_ASSIGNED
+  ROLE_REMOVED
+  CONTENT_CREATED
+  CONTENT_UPDATED
+  CONTENT_DELETED
+  CONTENT_PUBLISHED
+  CONTENT_MODERATED
+  PERMISSION_GRANTED
+  PERMISSION_REVOKED
+  SYSTEM_SETTING_CHANGED
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  userId      String?     // Null for system actions
+  action      AuditAction
+  resource    String      // Resource type (User, Content, Role, etc.)
+  resourceId  String?     // ID of the affected resource
+  details     Json?       // Additional details
+  ipAddress   String?
+  userAgent   String?
+
+  createdAt   DateTime    @default(now())
+
+  user        User?       @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([action])
+  @@index([resource, resourceId])
+  @@index([createdAt])
+}
+
+// ============================================
+// SYSTEM SETTINGS (Future use)
+// ============================================
+
+model SystemSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String   @db.Text
+  description String?  @db.Text
+  updatedAt   DateTime @updatedAt
+  updatedBy   String?  // User ID
+
+  @@index([key])
+}
+
+// ============================================
+// ANALYTICS & STATS (Prepared for future)
+// ============================================
+
+model DailyStats {
+  id              String   @id @default(cuid())
+  date            DateTime @unique @db.Date
+
+  // User stats
+  newUsers        Int      @default(0)
+  activeUsers     Int      @default(0)
+  totalUsers      Int      @default(0)
+
+  // Content stats
+  newContent      Int      @default(0)
+  publishedContent Int     @default(0)
+  totalContent    Int      @default(0)
+
+  // Engagement stats
+  totalViews      Int      @default(0)
+  totalLikes      Int      @default(0)
+  totalShares     Int      @default(0)
+
+  createdAt       DateTime @default(now())
+
+  @@index([date])
+}
