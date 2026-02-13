@@ -128,9 +128,9 @@ function formatDate(date: string) {
           </div>
           <div class="flex items-center space-x-4">
             <span class="text-sm text-gray-600">{{ fullName }}</span>
-            <UiButton variant="ghost" size="sm" @click="logout">
+            <Button variant="ghost" size="sm" @click="logout">
               Logout
-            </UiButton>
+            </Button>
           </div>
         </div>
       </div>
@@ -166,12 +166,12 @@ function formatDate(date: string) {
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Back Button -->
       <div class="mb-6">
-        <UiButton variant="ghost" @click="router.push('/admin/users')">
+        <Button variant="ghost" @click="router.push('/admin/users')">
           <svg class="h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Back to Users
-        </UiButton>
+        </Button>
       </div>
 
       <!-- Loading State -->
@@ -185,29 +185,29 @@ function formatDate(date: string) {
         <!-- Left Column - User Info -->
         <div class="lg:col-span-2 space-y-6">
           <!-- Alerts -->
-          <UiAlert v-if="success" type="success" dismissible @dismiss="success = ''">
+          <Alert v-if="success" type="success" dismissible @dismiss="success = ''">
             {{ success }}
-          </UiAlert>
+          </Alert>
 
-          <UiAlert v-if="error" type="error" dismissible @dismiss="error = ''">
+          <Alert v-if="error" type="error" dismissible @dismiss="error = ''">
             {{ error }}
-          </UiAlert>
+          </Alert>
 
           <!-- Basic Info Card -->
-          <UiCard>
+          <Card>
             <div class="flex justify-between items-start mb-6">
               <h3 class="text-lg font-semibold text-gray-900">Basic Information</h3>
               <div class="flex space-x-2">
-                <UiButton v-if="!editMode" variant="primary" size="sm" @click="editMode = true">
+                <Button v-if="!editMode" variant="primary" size="sm" @click="editMode = true">
                   Edit
-                </UiButton>
+                </Button>
                 <template v-else>
-                  <UiButton variant="primary" size="sm" :loading="saving" @click="saveChanges">
+                  <Button variant="primary" size="sm" :loading="saving" @click="saveChanges">
                     Save
-                  </UiButton>
-                  <UiButton variant="ghost" size="sm" @click="cancelEdit">
+                  </Button>
+                  <Button variant="ghost" size="sm" @click="cancelEdit">
                     Cancel
-                  </UiButton>
+                  </Button>
                 </template>
               </div>
             </div>
@@ -230,10 +230,10 @@ function formatDate(date: string) {
 
               <!-- Edit Form -->
               <div v-if="editMode" class="grid grid-cols-2 gap-4">
-                <UiInput v-model="form.firstName" label="First Name" required />
-                <UiInput v-model="form.lastName" label="Last Name" required />
+                <Input v-model="form.firstName" label="First Name" required />
+                <Input v-model="form.lastName" label="Last Name" required />
                 <div class="col-span-2">
-                  <UiInput v-model="form.phoneNumber" label="Phone Number" />
+                  <Input v-model="form.phoneNumber" label="Phone Number" />
                 </div>
                 <div class="col-span-2">
                   <label class="block text-sm font-medium text-gray-700 mb-1">Bio</label>
@@ -282,10 +282,10 @@ function formatDate(date: string) {
                 </div>
               </div>
             </div>
-          </UiCard>
+          </Card>
 
           <!-- Roles Card -->
-          <UiCard>
+          <Card>
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Roles & Permissions</h3>
 
             <!-- Edit Mode - Role Selection -->
@@ -339,10 +339,10 @@ function formatDate(date: string) {
               </div>
               <p v-else class="text-gray-500 text-center py-4">No roles assigned</p>
             </div>
-          </UiCard>
+          </Card>
 
           <!-- Profile Data Card (Type-specific) -->
-          <UiCard v-if="user.artistProfile || user.stakeholderProfile || user.governmentProfile">
+          <Card v-if="user.artistProfile || user.stakeholderProfile || user.governmentProfile">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Profile Data</h3>
 
             <!-- Artist Profile -->
@@ -392,13 +392,13 @@ function formatDate(date: string) {
                 <p class="font-medium">{{ user.governmentProfile.ministry }}</p>
               </div>
             </div>
-          </UiCard>
+          </Card>
         </div>
 
         <!-- Right Column - Stats & Activity -->
         <div class="space-y-6">
           <!-- Stats Card -->
-          <UiCard>
+          <Card>
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Statistics</h3>
             <div class="space-y-4">
               <div>
@@ -414,10 +414,10 @@ function formatDate(date: string) {
                 <p class="font-medium text-gray-900">{{ formatDate(user.lastLoginAt) }}</p>
               </div>
             </div>
-          </UiCard>
+          </Card>
 
           <!-- Account Info Card -->
-          <UiCard>
+          <Card>
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Account Info</h3>
             <div class="space-y-3">
               <div>
@@ -435,20 +435,20 @@ function formatDate(date: string) {
                 </p>
               </div>
             </div>
-          </UiCard>
+          </Card>
         </div>
       </div>
 
       <!-- Error State -->
       <div v-else>
-        <UiCard>
+        <Card>
           <div class="text-center py-12">
             <p class="text-red-600">User not found or you don't have permission to view this user.</p>
-            <UiButton variant="primary" class="mt-4" @click="router.push('/admin/users')">
+            <Button variant="primary" class="mt-4" @click="router.push('/admin/users')">
               Back to Users
-            </UiButton>
+            </Button>
           </div>
-        </UiCard>
+        </Card>
       </div>
     </main>
   </div>

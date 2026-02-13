@@ -22,19 +22,19 @@ const { loggedIn } = useUserSession()
           <!-- CTA Buttons -->
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <NuxtLink v-if="!loggedIn" to="/auth/register">
-              <UiButton size="lg" variant="primary">
+              <Button size="lg" variant="primary">
                 Get Started
-              </UiButton>
+              </Button>
             </NuxtLink>
             <NuxtLink v-if="!loggedIn" to="/auth/login">
-              <UiButton size="lg" variant="secondary">
+              <Button size="lg" variant="secondary">
                 Sign In
-              </UiButton>
+              </Button>
             </NuxtLink>
             <NuxtLink v-if="loggedIn" to="/dashboard">
-              <UiButton size="lg" variant="primary">
+              <Button size="lg" variant="primary">
                 Go to Dashboard
-              </UiButton>
+              </Button>
             </NuxtLink>
           </div>
         </div>
@@ -45,7 +45,7 @@ const { loggedIn } = useUserSession()
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="grid md:grid-cols-3 gap-8">
         <!-- Feature 1 -->
-        <UiCard>
+        <Card>
           <div class="text-center">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-primary-100 mb-4">
               <svg class="h-6 w-6 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,10 +55,10 @@ const { loggedIn } = useUserSession()
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Connect with Creatives</h3>
             <p class="text-gray-600">Network with artists, musicians, and creative professionals across Ghana.</p>
           </div>
-        </UiCard>
+        </Card>
 
         <!-- Feature 2 -->
-        <UiCard>
+        <Card>
           <div class="text-center">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-secondary-100 mb-4">
               <svg class="h-6 w-6 text-secondary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -68,10 +68,10 @@ const { loggedIn } = useUserSession()
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Showcase Your Work</h3>
             <p class="text-gray-600">Share your creative content, music, art, and performances with a wider audience.</p>
           </div>
-        </UiCard>
+        </Card>
 
         <!-- Feature 3 -->
-        <UiCard>
+        <Card>
           <div class="text-center">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-accent-100 mb-4">
               <svg class="h-6 w-6 text-accent-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -81,7 +81,7 @@ const { loggedIn } = useUserSession()
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Industry Insights</h3>
             <p class="text-gray-600">Access analytics, trends, and data about Ghana's creative arts industry.</p>
           </div>
-        </UiCard>
+        </Card>
       </div>
     </div>
 
@@ -114,9 +114,9 @@ const { loggedIn } = useUserSession()
 
       <div class="text-center mt-8">
         <NuxtLink to="/content">
-          <UiButton size="lg" variant="primary">
+          <Button size="lg" variant="primary">
             Explore All Content
-          </UiButton>
+          </Button>
         </NuxtLink>
       </div>
     </div>
@@ -161,9 +161,9 @@ const { loggedIn } = useUserSession()
 
         <div class="text-center mt-8">
           <NuxtLink to="/ai-features">
-            <UiButton size="lg" variant="secondary">
+            <Button size="lg" variant="secondary">
               Learn More About AI Features
-            </UiButton>
+            </Button>
           </NuxtLink>
         </div>
       </div>

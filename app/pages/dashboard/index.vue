@@ -17,9 +17,9 @@ const { logout } = useAuth()
         </h1>
         <div class="flex items-center space-x-4">
           <span class="text-sm text-gray-600">{{ fullName }}</span>
-          <UiButton variant="ghost" size="sm" @click="logout">
+          <Button variant="ghost" size="sm" @click="logout">
             Logout
-          </UiButton>
+          </Button>
         </div>
       </div>
     </header>
@@ -49,7 +49,7 @@ const { logout } = useAuth()
         <!-- Sidebar -->
         <div class="space-y-6">
           <!-- User Info Card -->
-          <UiCard>
+          <Card>
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Your Account</h3>
             <div class="space-y-3">
               <div class="flex items-center">
@@ -77,38 +77,38 @@ const { logout } = useAuth()
               </div>
               <div class="pt-3">
                 <NuxtLink to="/dashboard/profile">
-                  <UiButton variant="secondary" size="sm" class="w-full">
+                  <Button variant="secondary" size="sm" class="w-full">
                     View Profile
-                  </UiButton>
+                  </Button>
                 </NuxtLink>
               </div>
             </div>
-          </UiCard>
+          </Card>
 
           <!-- Quick Actions -->
-          <UiCard>
+          <Card>
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div class="space-y-2">
               <NuxtLink to="/dashboard/content/upload" class="block">
-                <UiButton variant="primary" size="sm" class="w-full">
+                <Button variant="primary" size="sm" class="w-full">
                   Upload Content
-                </UiButton>
+                </Button>
               </NuxtLink>
               <NuxtLink to="/content" class="block">
-                <UiButton variant="secondary" size="sm" class="w-full">
+                <Button variant="secondary" size="sm" class="w-full">
                   Browse Content
-                </UiButton>
+                </Button>
               </NuxtLink>
               <NuxtLink to="/ai-features" class="block">
-                <UiButton variant="secondary" size="sm" class="w-full">
+                <Button variant="secondary" size="sm" class="w-full">
                   AI Features
-                </UiButton>
+                </Button>
               </NuxtLink>
             </div>
-          </UiCard>
+          </Card>
 
           <!-- Platform Stats -->
-          <UiCard>
+          <Card>
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Platform Activity</h3>
             <div class="space-y-3 text-sm">
               <div class="flex items-start">
@@ -133,7 +133,7 @@ const { logout } = useAuth()
                 </div>
               </div>
             </div>
-          </UiCard>
+          </Card>
         </div>
       </div>
     </main>

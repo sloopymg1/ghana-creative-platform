@@ -19,9 +19,9 @@ const { logout } = useAuth()
           </div>
           <div class="flex items-center space-x-4">
             <span class="text-sm text-gray-600">{{ fullName }}</span>
-            <UiButton variant="ghost" size="sm" @click="logout">
+            <Button variant="ghost" size="sm" @click="logout">
               Logout
-            </UiButton>
+            </Button>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@ const { logout } = useAuth()
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- Stats Cards -->
-        <UiCard>
+        <Card>
           <div class="flex items-center">
             <div class="flex-shrink-0 bg-blue-100 rounded-lg p-3">
               <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,9 +69,9 @@ const { logout } = useAuth()
               <p class="text-2xl font-semibold text-gray-900">-</p>
             </div>
           </div>
-        </UiCard>
+        </Card>
 
-        <UiCard>
+        <Card>
           <div class="flex items-center">
             <div class="flex-shrink-0 bg-green-100 rounded-lg p-3">
               <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,9 +83,9 @@ const { logout } = useAuth()
               <p class="text-2xl font-semibold text-gray-900">-</p>
             </div>
           </div>
-        </UiCard>
+        </Card>
 
-        <UiCard>
+        <Card>
           <div class="flex items-center">
             <div class="flex-shrink-0 bg-purple-100 rounded-lg p-3">
               <svg class="h-6 w-6 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,11 +97,11 @@ const { logout } = useAuth()
               <p class="text-2xl font-semibold text-gray-900">4</p>
             </div>
           </div>
-        </UiCard>
+        </Card>
       </div>
 
       <!-- Welcome Message -->
-      <UiCard>
+      <Card>
         <div class="text-center py-12">
           <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-primary-100 mb-4">
             <svg class="h-8 w-8 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -117,18 +117,18 @@ const { logout } = useAuth()
           </p>
           <div class="flex justify-center space-x-4">
             <NuxtLink to="/admin/users">
-              <UiButton variant="primary">
+              <Button variant="primary">
                 Manage Users
-              </UiButton>
+              </Button>
             </NuxtLink>
             <NuxtLink to="/admin/roles">
-              <UiButton variant="secondary">
+              <Button variant="secondary">
                 Manage Roles
-              </UiButton>
+              </Button>
             </NuxtLink>
           </div>
         </div>
-      </UiCard>
+      </Card>
     </main>
   </div>
 </template>

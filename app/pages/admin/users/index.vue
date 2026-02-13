@@ -56,9 +56,9 @@ function formatDate(date: string) {
           </div>
           <div class="flex items-center space-x-4">
             <span class="text-sm text-gray-600">{{ fullName }}</span>
-            <UiButton variant="ghost" size="sm" @click="logout">
+            <Button variant="ghost" size="sm" @click="logout">
               Logout
-            </UiButton>
+            </Button>
           </div>
         </div>
       </div>
@@ -92,19 +92,19 @@ function formatDate(date: string) {
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <UiCard>
+      <Card>
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
           <div>
             <h2 class="text-lg font-semibold text-gray-900">All Users</h2>
             <p class="text-sm text-gray-600">Manage user accounts and permissions</p>
           </div>
-          <UiButton variant="primary" @click="refresh">
+          <Button variant="primary" @click="refresh">
             <svg class="h-4 w-4 mr-2" :class="{ 'animate-spin': pending }" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
             Refresh
-          </UiButton>
+          </Button>
         </div>
 
         <!-- Loading State -->
@@ -216,7 +216,7 @@ function formatDate(date: string) {
             ({{ meta.total }} total users)
           </div>
         </div>
-      </UiCard>
+      </Card>
     </main>
   </div>
 </template>
