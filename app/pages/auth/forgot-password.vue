@@ -31,19 +31,19 @@ async function handleSubmit() {
 
 <template>
   <div>
-    <UiCard>
+    <Card>
       <div v-if="!submitted">
         <h2 class="text-2xl font-bold text-gray-900 mb-2">Forgot Password?</h2>
         <p class="text-gray-600 mb-6">
           Enter your email address and we'll send you a link to reset your password.
         </p>
 
-        <UiAlert v-if="error" type="error" class="mb-4" dismissible @dismiss="error = ''">
+        <Alert v-if="error" type="error" class="mb-4" dismissible @dismiss="error = ''">
           {{ error }}
-        </UiAlert>
+        </Alert>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
-          <UiInput
+          <Input
             v-model="email"
             type="email"
             label="Email Address"
@@ -51,14 +51,14 @@ async function handleSubmit() {
             required
           />
 
-          <UiButton
+          <Button
             type="submit"
             :loading="loading"
             :disabled="!email"
             full-width
           >
             Send Reset Link
-          </UiButton>
+          </Button>
         </form>
 
         <div class="mt-6 text-center">
@@ -82,10 +82,10 @@ async function handleSubmit() {
         <p class="text-sm text-gray-500 mb-4">
           The link will expire in 1 hour for security reasons.
         </p>
-        <UiButton variant="ghost" full-width @click="$router.push('/auth/login')">
+        <Button variant="ghost" full-width @click="$router.push('/auth/login')">
           Return to Login
-        </UiButton>
+        </Button>
       </div>
-    </UiCard>
+    </Card>
   </div>
 </template>

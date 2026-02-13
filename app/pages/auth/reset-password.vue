@@ -58,23 +58,23 @@ async function handleSubmit() {
 
 <template>
   <div>
-    <UiCard>
+    <Card>
       <div v-if="!resetComplete">
         <h2 class="text-2xl font-bold text-gray-900 mb-2">Reset Your Password</h2>
         <p class="text-gray-600 mb-6">
           Enter your new password below.
         </p>
 
-        <UiAlert v-if="error" type="error" class="mb-4" dismissible @dismiss="error = ''">
+        <Alert v-if="error" type="error" class="mb-4" dismissible @dismiss="error = ''">
           {{ error }}
-        </UiAlert>
+        </Alert>
 
-        <UiAlert v-if="!token" type="warning" class="mb-4">
+        <Alert v-if="!token" type="warning" class="mb-4">
           Invalid or missing reset token. Please request a new password reset link.
-        </UiAlert>
+        </Alert>
 
         <form v-if="token" @submit.prevent="handleSubmit" class="space-y-4">
-          <UiInput
+          <Input
             v-model="form.password"
             type="password"
             label="New Password"
@@ -82,7 +82,7 @@ async function handleSubmit() {
             required
           />
 
-          <UiInput
+          <Input
             v-model="form.confirmPassword"
             type="password"
             label="Confirm New Password"
@@ -103,14 +103,14 @@ async function handleSubmit() {
             </ul>
           </div>
 
-          <UiButton
+          <Button
             type="submit"
             :loading="loading"
             :disabled="!form.password || !passwordsMatch"
             full-width
           >
             Reset Password
-          </UiButton>
+          </Button>
         </form>
 
         <div class="mt-6 text-center">
@@ -134,10 +134,10 @@ async function handleSubmit() {
         <p class="text-sm text-gray-500 mb-4">
           Redirecting you to login...
         </p>
-        <UiButton variant="primary" full-width @click="router.push('/auth/login')">
+        <Button variant="primary" full-width @click="router.push('/auth/login')">
           Go to Login
-        </UiButton>
+        </Button>
       </div>
-    </UiCard>
+    </Card>
   </div>
 </template>

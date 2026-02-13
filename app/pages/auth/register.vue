@@ -70,16 +70,16 @@ async function handleRegister() {
 
 <template>
   <div>
-    <UiCard>
+    <Card>
       <h2 class="text-2xl font-bold text-gray-900 mb-6">Create Your Account</h2>
 
-      <UiAlert v-if="error" type="error" class="mb-4" dismissible @dismiss="error = ''">
+      <Alert v-if="error" type="error" class="mb-4" dismissible @dismiss="error = ''">
         {{ error }}
-      </UiAlert>
+      </Alert>
 
-      <UiAlert v-if="success" type="success" class="mb-4">
+      <Alert v-if="success" type="success" class="mb-4">
         {{ success }}
-      </UiAlert>
+      </Alert>
 
       <form @submit.prevent="handleRegister" class="space-y-4">
         <!-- User Type Selection -->
@@ -125,13 +125,13 @@ async function handleRegister() {
 
         <!-- Name Fields -->
         <div class="grid grid-cols-2 gap-4">
-          <UiInput
+          <Input
             v-model="form.firstName"
             label="First Name"
             placeholder="John"
             required
           />
-          <UiInput
+          <Input
             v-model="form.lastName"
             label="Last Name"
             placeholder="Doe"
@@ -140,7 +140,7 @@ async function handleRegister() {
         </div>
 
         <!-- Email -->
-        <UiInput
+        <Input
           v-model="form.email"
           type="email"
           label="Email Address"
@@ -149,7 +149,7 @@ async function handleRegister() {
         />
 
         <!-- Phone (Optional) -->
-        <UiInput
+        <Input
           v-model="form.phoneNumber"
           type="tel"
           label="Phone Number (Optional)"
@@ -157,7 +157,7 @@ async function handleRegister() {
         />
 
         <!-- Password -->
-        <UiInput
+        <Input
           v-model="form.password"
           type="password"
           label="Password"
@@ -166,7 +166,7 @@ async function handleRegister() {
         />
 
         <!-- Confirm Password -->
-        <UiInput
+        <Input
           v-model="form.confirmPassword"
           type="password"
           label="Confirm Password"
@@ -187,14 +187,14 @@ async function handleRegister() {
           </ul>
         </div>
 
-        <UiButton
+        <Button
           type="submit"
           :loading="loading"
           :disabled="!form.email || !form.password || !passwordsMatch"
           full-width
         >
           Create Account
-        </UiButton>
+        </Button>
       </form>
 
       <div class="mt-6 text-center">
@@ -205,6 +205,6 @@ async function handleRegister() {
           </NuxtLink>
         </p>
       </div>
-    </UiCard>
+    </Card>
   </div>
 </template>

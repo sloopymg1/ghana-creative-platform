@@ -39,19 +39,19 @@ async function handleLogin() {
 
 <template>
   <div>
-    <UiCard>
+    <Card>
       <h2 class="text-2xl font-bold text-gray-900 mb-6">Welcome Back</h2>
 
-      <UiAlert v-if="error" type="error" class="mb-4" dismissible @dismiss="error = ''">
+      <Alert v-if="error" type="error" class="mb-4" dismissible @dismiss="error = ''">
         {{ error }}
-      </UiAlert>
+      </Alert>
 
-      <UiAlert v-if="success" type="success" class="mb-4">
+      <Alert v-if="success" type="success" class="mb-4">
         {{ success }}
-      </UiAlert>
+      </Alert>
 
       <form @submit.prevent="handleLogin" class="space-y-4">
-        <UiInput
+        <Input
           v-model="form.email"
           type="email"
           label="Email Address"
@@ -59,7 +59,7 @@ async function handleLogin() {
           required
         />
 
-        <UiInput
+        <Input
           v-model="form.password"
           type="password"
           label="Password"
@@ -77,14 +77,14 @@ async function handleLogin() {
           </NuxtLink>
         </div>
 
-        <UiButton
+        <Button
           type="submit"
           :loading="loading"
           :disabled="!form.email || !form.password"
           full-width
         >
           Sign In
-        </UiButton>
+        </Button>
       </form>
 
       <div class="mt-6 text-center">
@@ -95,6 +95,6 @@ async function handleLogin() {
           </NuxtLink>
         </p>
       </div>
-    </UiCard>
+    </Card>
   </div>
 </template>
