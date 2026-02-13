@@ -34,6 +34,15 @@ export default defineNuxtConfig({
     uploadMaxSize: 52428800, // 50MB
     uploadAllowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'audio/mpeg'],
 
+    // AzuraCast Radio Streaming
+    azuracast: {
+      apiUrl: process.env.AZURACAST_API_URL || '',
+      apiKey: process.env.AZURACAST_API_KEY || '',
+      adminKey: process.env.AZURACAST_ADMIN_KEY || '',
+      cacheTtl: parseInt(process.env.AZURACAST_CACHE_TTL || '60'),
+      syncInterval: parseInt(process.env.AZURACAST_SYNC_INTERVAL || '30'),
+    },
+
     // Public (exposed to client)
     public: {
       appName: 'Ghana Creative Arts Board',

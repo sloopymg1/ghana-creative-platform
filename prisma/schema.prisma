@@ -66,6 +66,7 @@ model User {
   contentReports    ContentReport[]
   auditLogs         AuditLog[]
   notifications     Notification[]
+  radioStations     RadioStation[]
 
   @@index([email])
   @@index([status])
@@ -392,6 +393,69 @@ model ContentReport {
   @@index([contentId])
   @@index([reportedBy])
   @@index([status])
+}
+
+// ============================================
+// RADIO STREAMING
+// ============================================
+
+enum StationStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  DELETED
+}
+
+model RadioStation {
+  id                String   @id @default(uuid())
+
+  // AzuraCast Configuration
+  azuracastStationId Int     @unique          // AzuraCast station ID
+  azuracastUrl      String                    // Base URL of AzuraCast instance
+
+  // Station Information
+  name              String
+  description       String?  @db.Text
+  slug              String   @unique
+  genre             String?
+
+  // Streaming URLs
+  streamUrl         String                    // Primary stream URL (mp3/aac)
+  streamUrlHls      String?                   // HLS stream URL (if available)
+  streamUrlOgg      String?                   // Ogg stream URL (if available)
+
+  // Metadata
+  logoUrl           String?
+  coverUrl          String?
+  websiteUrl        String?
+
+  // Real-time Data (cached from AzuraCast)
+  isLive            Boolean  @default(false)
+  currentTrack      Json?                     // Now-playing track info
+  listenerCount     Int      @default(0)
+  listenerPeak      Int      @default(0)
+
+  // Status & Settings
+  status            StationStatus @default(ACTIVE)
+  isPublic          Boolean  @default(true)   // Show in public directory
+  isFeatured        Boolean  @default(false)
+
+  // Sync tracking
+  lastSyncAt        DateTime?
+  syncEnabled       Boolean  @default(true)
+  syncInterval      Int      @default(60)     // Seconds between syncs
+
+  // Relations
+  ownerId           String?
+  owner             User?    @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+
+  // Timestamps
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([slug])
+  @@index([status, isPublic])
+  @@index([azuracastStationId])
 }
 
 // ============================================
