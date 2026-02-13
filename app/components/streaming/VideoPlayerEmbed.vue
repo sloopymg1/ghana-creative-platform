@@ -1,32 +1,34 @@
 <template>
   <div class="bg-black rounded-lg overflow-hidden">
-    <!-- YouTube Embed -->
-    <div v-if="embedType === 'youtube'" :class="aspectRatio">
+    <!-- YouTube Embed with 16:9 aspect ratio -->
+    <div v-if="embedType === 'youtube'" class="relative w-full" style="padding-bottom: 56.25%">
       <iframe
-        :src="`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`"
-        class="w-full h-full"
+        :src="embedUrl"
+        class="absolute top-0 left-0 w-full h-full"
         frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
       ></iframe>
     </div>
 
-    <!-- Vimeo Embed -->
-    <div v-else-if="embedType === 'vimeo'" :class="aspectRatio">
+    <!-- Vimeo Embed with 16:9 aspect ratio -->
+    <div v-else-if="embedType === 'vimeo'" class="relative w-full" style="padding-bottom: 56.25%">
       <iframe
-        :src="`https://player.vimeo.com/video/${videoId}?title=0&byline=0&portrait=0`"
-        class="w-full h-full"
+        :src="embedUrl"
+        class="absolute top-0 left-0 w-full h-full"
         frameborder="0"
         allow="autoplay; fullscreen; picture-in-picture"
         allowfullscreen
       ></iframe>
     </div>
 
-    <!-- Facebook Embed -->
-    <div v-else-if="embedType === 'facebook'" :class="aspectRatio">
+    <!-- Facebook Embed with flexible height -->
+    <div v-else-if="embedType === 'facebook'" class="relative w-full">
       <iframe
-        :src="`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoUrl)}&show_text=false`"
-        class="w-full h-full"
+        :src="embedUrl"
+        class="w-full"
+        style="min-height: 500px; border: none;"
+        scrolling="no"
         frameborder="0"
         allowfullscreen
       ></iframe>
@@ -34,13 +36,10 @@
 
     <!-- Fallback: Direct Video URL -->
     <div v-else>
-      <VideoPlayer
-        :video-url="videoUrl"
-        :title="title"
-        :artist-name="artistName"
-        :thumbnail-url="thumbnailUrl"
-        :aspect-ratio="aspectRatio"
-      />
+      <video controls class="w-full rounded-lg">
+        <source :src="videoUrl" />
+        Your browser does not support the video tag.
+      </video>
     </div>
 
     <!-- Video Info -->
@@ -63,10 +62,10 @@ const props = withDefaults(
     title: string
     artistName: string
     thumbnailUrl?: string
-    aspectRatio?: string
+    autoplay?: boolean
   }>(),
   {
-    aspectRatio: 'aspect-video',
+    autoplay: false,
   }
 )
 
@@ -85,12 +84,45 @@ const embedType = computed(() => {
 // Extract video ID
 const videoId = computed(() => {
   if (embedType.value === 'youtube') {
-    const match = props.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/)
+    const match = props.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
     return match ? match[1] : ''
   } else if (embedType.value === 'vimeo') {
     const match = props.videoUrl.match(/vimeo\.com\/(\d+)/)
     return match ? match[1] : ''
   }
+  return ''
+})
+
+// Generate enhanced embed URL with better parameters
+const embedUrl = computed(() => {
+  const autoplayParam = props.autoplay ? 1 : 0
+
+  if (embedType.value === 'youtube' && videoId.value) {
+    return `https://www.youtube.com/embed/${videoId.value}?` +
+      `rel=0&` +                    // Don't show related videos
+      `modestbranding=1&` +         // Minimal YouTube branding
+      `vq=hd1080&` +                // Prefer HD quality
+      `playsinline=1&` +            // Better mobile experience
+      `autoplay=${autoplayParam}`
+  }
+
+  if (embedType.value === 'facebook') {
+    return `https://www.facebook.com/plugins/video.php?` +
+      `href=${encodeURIComponent(props.videoUrl)}&` +
+      `width=730&` +                // Standard width
+      `show_text=false&` +          // Hide post text
+      `autoplay=${autoplayParam}&` +
+      `mute=0`
+  }
+
+  if (embedType.value === 'vimeo' && videoId.value) {
+    return `https://player.vimeo.com/video/${videoId.value}?` +
+      `title=0&` +                  // Hide title
+      `byline=0&` +                 // Hide author
+      `portrait=0&` +               // Hide author image
+      `autoplay=${autoplayParam}`
+  }
+
   return ''
 })
 </script>

@@ -11,6 +11,8 @@ const updateContentSchema = z.object({
   ])).optional(),
   tags: z.array(z.string()).max(10).optional(),
   licenseType: z.string().optional(),
+  externalUrl: z.string().url().optional().or(z.literal('')),
+  duration: z.number().optional(),
 })
 
 export default defineEventHandler(async (event) => {

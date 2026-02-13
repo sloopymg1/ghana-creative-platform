@@ -17,6 +17,24 @@ export default defineEventHandler(async (event) => {
   try {
     const validatedData = createContentSchema.parse(body)
 
+    // Validate VIDEO type requires externalUrl
+    if (validatedData.type === 'VIDEO') {
+      if (!validatedData.externalUrl) {
+        throw createError({
+          statusCode: 400,
+          message: 'VIDEO content requires an externalUrl (YouTube, Facebook, or Vimeo link)',
+        })
+      }
+
+      const isValid = validateVideoUrl(validatedData.externalUrl, validatedData.type)
+      if (!isValid) {
+        throw createError({
+          statusCode: 400,
+          message: 'Invalid video URL. Please provide a valid YouTube, Facebook, or Vimeo URL',
+        })
+      }
+    }
+
     // Generate unique slug
     let slug = slugify(validatedData.title, { lower: true, strict: true })
     const existingSlug = await prisma.content.findUnique({ where: { slug } })
@@ -36,6 +54,8 @@ export default defineEventHandler(async (event) => {
         categories: validatedData.categories,
         tags: validatedData.tags,
         licenseType: validatedData.licenseType,
+        externalUrl: validatedData.externalUrl || null,
+        duration: validatedData.duration || null,
       },
       include: {
         user: {
