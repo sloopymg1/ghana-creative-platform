@@ -40,10 +40,10 @@ const { logout } = useAuth()
         <!-- Main Content Area -->
         <div class="lg:col-span-2 space-y-6">
           <!-- Personalized Recommendations -->
-          <AiRecommendationsWidget :limit="6" :auto-refresh="true" />
+          <RecommendationsWidget :limit="6" :auto-refresh="true" />
 
           <!-- Trending Content -->
-          <AiTrendingWidget />
+          <TrendingWidget />
         </div>
 
         <!-- Sidebar -->

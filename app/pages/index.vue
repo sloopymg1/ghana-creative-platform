@@ -96,7 +96,7 @@ const { loggedIn } = useUserSession()
             Discover what's hot on the platform right now
           </p>
         </div>
-        <AiTrendingWidget />
+        <TrendingWidget />
       </div>
     </div>
 
@@ -110,7 +110,7 @@ const { loggedIn } = useUserSession()
           Popular content from talented creators across Ghana
         </p>
       </div>
-      <AiRecommendationsWidget :limit="8" />
+      <RecommendationsWidget :limit="8" />
 
       <div class="text-center mt-8">
         <NuxtLink to="/content">

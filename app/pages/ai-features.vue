@@ -12,11 +12,11 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Recommendations Widget -->
         <div class="lg:col-span-2">
-          <AiRecommendationsWidget :limit="10" />
+          <RecommendationsWidget :limit="10" />
 
           <!-- Trending Content -->
           <div class="mt-6">
-            <AiTrendingWidget />
+            <TrendingWidget />
           </div>
         </div>
 
