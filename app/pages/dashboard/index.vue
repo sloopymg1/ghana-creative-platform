@@ -26,41 +26,116 @@ const { logout } = useAuth()
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <UiCard>
-        <div class="text-center py-12">
-          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
-            <svg class="h-8 w-8 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">
-            Welcome, {{ user?.firstName }}! 🎉
-          </h2>
-          <p class="text-lg text-gray-600 mb-2">
-            You're now logged in to the Ghana Creative Arts Board platform.
-          </p>
-          <p class="text-gray-500 mb-8">
-            User Type: <span class="font-semibold text-gray-700">{{ user?.userType }}</span>
-          </p>
+      <!-- Welcome Section -->
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">
+          Welcome back, {{ user?.firstName }}! 👋
+        </h2>
+        <p class="text-gray-600">
+          Here's what's happening on the platform today
+        </p>
+      </div>
 
-          <!-- User Info -->
-          <div class="max-w-md mx-auto bg-gray-50 rounded-lg p-6 text-left">
-            <h3 class="font-semibold text-gray-900 mb-3">Your Account Details:</h3>
-            <ul class="space-y-2 text-sm text-gray-600">
-              <li><strong>Email:</strong> {{ user?.email }}</li>
-              <li><strong>Name:</strong> {{ fullName }}</li>
-              <li><strong>Status:</strong> <span class="text-green-600 font-medium">{{ user?.status }}</span></li>
-              <li><strong>Email Verified:</strong> <span class="text-green-600">✓ Yes</span></li>
-            </ul>
-          </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Main Content Area -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Personalized Recommendations -->
+          <AiRecommendationsWidget :limit="6" :auto-refresh="true" />
 
-          <div class="mt-8">
-            <p class="text-sm text-gray-500">
-              This is a placeholder dashboard. More features coming soon!
-            </p>
-          </div>
+          <!-- Trending Content -->
+          <AiTrendingWidget />
         </div>
-      </UiCard>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- User Info Card -->
+          <UiCard>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Your Account</h3>
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
+                  <span class="text-xl font-bold text-primary-600">
+                    {{ user?.firstName?.charAt(0) }}{{ user?.lastName?.charAt(0) }}
+                  </span>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-gray-900">{{ fullName }}</p>
+                  <p class="text-xs text-gray-500">{{ user?.userType }}</p>
+                </div>
+              </div>
+              <div class="border-t border-gray-200 pt-3">
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Status</span>
+                    <span class="text-green-600 font-medium">{{ user?.status }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">Email</span>
+                    <span class="text-green-600">✓ Verified</span>
+                  </div>
+                </div>
+              </div>
+              <div class="pt-3">
+                <NuxtLink to="/dashboard/profile">
+                  <UiButton variant="secondary" size="sm" class="w-full">
+                    View Profile
+                  </UiButton>
+                </NuxtLink>
+              </div>
+            </div>
+          </UiCard>
+
+          <!-- Quick Actions -->
+          <UiCard>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+            <div class="space-y-2">
+              <NuxtLink to="/dashboard/content/upload" class="block">
+                <UiButton variant="primary" size="sm" class="w-full">
+                  Upload Content
+                </UiButton>
+              </NuxtLink>
+              <NuxtLink to="/content" class="block">
+                <UiButton variant="secondary" size="sm" class="w-full">
+                  Browse Content
+                </UiButton>
+              </NuxtLink>
+              <NuxtLink to="/ai-features" class="block">
+                <UiButton variant="secondary" size="sm" class="w-full">
+                  AI Features
+                </UiButton>
+              </NuxtLink>
+            </div>
+          </UiCard>
+
+          <!-- Platform Stats -->
+          <UiCard>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Platform Activity</h3>
+            <div class="space-y-3 text-sm">
+              <div class="flex items-start">
+                <span class="text-2xl mr-3">🎵</span>
+                <div>
+                  <p class="font-medium text-gray-900">New Music</p>
+                  <p class="text-xs text-gray-600">Discover fresh tracks daily</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <span class="text-2xl mr-3">📈</span>
+                <div>
+                  <p class="font-medium text-gray-900">Trending Now</p>
+                  <p class="text-xs text-gray-600">See what's popular today</p>
+                </div>
+              </div>
+              <div class="flex items-start">
+                <span class="text-2xl mr-3">🤖</span>
+                <div>
+                  <p class="font-medium text-gray-900">AI-Powered</p>
+                  <p class="text-xs text-gray-600">Smart recommendations for you</p>
+                </div>
+              </div>
+            </div>
+          </UiCard>
+        </div>
+      </div>
     </main>
   </div>
 </template>

@@ -85,6 +85,90 @@ const { loggedIn } = useUserSession()
       </div>
     </div>
 
+    <!-- Trending Content Section -->
+    <div class="bg-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            🔥 Trending Now
+          </h2>
+          <p class="text-lg text-gray-600">
+            Discover what's hot on the platform right now
+          </p>
+        </div>
+        <AiTrendingWidget />
+      </div>
+    </div>
+
+    <!-- Discover Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4">
+          ✨ Discover Amazing Content
+        </h2>
+        <p class="text-lg text-gray-600 mb-8">
+          Popular content from talented creators across Ghana
+        </p>
+      </div>
+      <AiRecommendationsWidget :limit="8" />
+
+      <div class="text-center mt-8">
+        <NuxtLink to="/content">
+          <UiButton size="lg" variant="primary">
+            Explore All Content
+          </UiButton>
+        </NuxtLink>
+      </div>
+    </div>
+
+    <!-- AI Features Highlight -->
+    <div class="bg-gradient-to-r from-primary-50 to-secondary-50 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8">
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">
+            🤖 Powered by AI
+          </h2>
+          <p class="text-lg text-gray-600 mb-8">
+            Our intelligent platform helps you discover the best content
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-6">
+          <div class="bg-white rounded-lg p-6 text-center shadow-sm">
+            <div class="text-3xl mb-3">🎯</div>
+            <h3 class="font-semibold text-gray-900 mb-2">Smart Recommendations</h3>
+            <p class="text-sm text-gray-600">Personalized content just for you</p>
+          </div>
+
+          <div class="bg-white rounded-lg p-6 text-center shadow-sm">
+            <div class="text-3xl mb-3">📈</div>
+            <h3 class="font-semibold text-gray-900 mb-2">Trend Detection</h3>
+            <p class="text-sm text-gray-600">Stay on top of what's popular</p>
+          </div>
+
+          <div class="bg-white rounded-lg p-6 text-center shadow-sm">
+            <div class="text-3xl mb-3">🔗</div>
+            <h3 class="font-semibold text-gray-900 mb-2">Similar Content</h3>
+            <p class="text-sm text-gray-600">Find related works easily</p>
+          </div>
+
+          <div class="bg-white rounded-lg p-6 text-center shadow-sm">
+            <div class="text-3xl mb-3">🏷️</div>
+            <h3 class="font-semibold text-gray-900 mb-2">Smart Tagging</h3>
+            <p class="text-sm text-gray-600">Automatic content categorization</p>
+          </div>
+        </div>
+
+        <div class="text-center mt-8">
+          <NuxtLink to="/ai-features">
+            <UiButton size="lg" variant="secondary">
+              Learn More About AI Features
+            </UiButton>
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 mt-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600">
